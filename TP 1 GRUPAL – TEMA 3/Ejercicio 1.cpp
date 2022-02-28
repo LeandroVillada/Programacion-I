@@ -13,16 +13,29 @@ int main()
     // Variables
     int n;
     int primerMaximo, segundoMaximo, temp;
-    bool bandera = false;
+    int contador = 0;
 
     // Desarrollo del Programa
     for (int i = 0; i < 5; i++)
     {
         cin >> n;
-        if (!bandera)
+        if (contador == 0)
         {
             primerMaximo = n;
-            bandera = true;
+            contador++;
+        }
+        else if (contador == 1)
+        {
+            contador++;
+            if (n > primerMaximo)
+            {
+                segundoMaximo = primerMaximo;
+                primerMaximo = n;
+            }
+            else
+            {
+                segundoMaximo = n;
+            }
         }
         else
         {
@@ -34,6 +47,9 @@ int main()
             if (temp < primerMaximo)
             {
                 segundoMaximo = temp;
+            }
+            else if(n>segundoMaximo){
+                segundoMaximo=n;
             }
         }
     }
