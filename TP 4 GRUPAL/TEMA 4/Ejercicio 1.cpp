@@ -33,10 +33,13 @@ const int vendedores = 10;
 // Registros de artículos:
 void primerLote(int *, float *);
 // Ventas efectuadas el anio anterior
-void segundoLote(float *, float *);
+void segundoLote(float *, float *, int *);
 // Punto A
 // Listar recaudacion total mes por mes
 void listarRecaudacionTotalMes(float *);
+// Punto B
+// Listar bimestres en lo que no hubo ventas
+void listarBimestresSinVentas(int *);
 
 int main()
 {
@@ -48,13 +51,18 @@ int main()
     // Punto A
     float recaudacionTotalMes[12] = {0};
 
+    // Punto B
+    int bimestres[6] = {0};
+
     // Desarrollo del Programa
     // Primer Lote
     primerLote(categoriaArticulo, precioUnitario);
     // Segundo Lote
-    segundoLote(precioUnitario, recaudacionTotalMes);
+    segundoLote(precioUnitario, recaudacionTotalMes, bimestres);
     // Punto A
     listarRecaudacionTotalMes(recaudacionTotalMes);
+    // Punto B
+    listarBimestresSinVentas(bimestres);
     puts("");
 
     // Fin del Programa
@@ -78,7 +86,7 @@ void primerLote(int *categoriaArticulo, float *precioUnitario)
         cin >> codigoArticulo;
     }
 }
-void segundoLote(float *precioUnitario, float *recaudacionTotalMes)
+void segundoLote(float *precioUnitario, float *recaudacionTotalMes, int *bimestres)
 {
     int mesVenta;       // (1 a 12)
     int diaVenta;       // (1 a 31)
@@ -100,7 +108,12 @@ void segundoLote(float *precioUnitario, float *recaudacionTotalMes)
         cin >> cantidadVendida;
 
         // Punto A
-        recaudacionTotalMes[mesVenta - 1] = precioUnitario[codigoArticulo - 1] * cantidadVendida;
+        recaudacionTotalMes[mesVenta - 1] += precioUnitario[codigoArticulo - 1] * cantidadVendida;
+        // Punto B
+        if (mesVenta % 2 != 0)
+            bimestres[((mesVenta + 1) / 2) - 1]++;
+        else
+            bimestres[(mesVenta / 2) - 1]++;
 
         cout << "MES DE LA VENTA (1 a 12): ";
         cin >> mesVenta;
@@ -108,9 +121,18 @@ void segundoLote(float *precioUnitario, float *recaudacionTotalMes)
 }
 void listarRecaudacionTotalMes(float *recaudacionTotalMes)
 {
-    cout<<"\nRecaudacion total mes por mes."<<endl;
+    cout << "\nRecaudacion total mes por mes." << endl;
     for (int i = 0; i < 12; i++)
     {
         cout << "Mes " << i + 1 << ": Recaudacion Total: " << recaudacionTotalMes[i] << endl;
+    }
+}
+void listarBimestresSinVentas(int *bimestres)
+{
+    cout << "\nBimestres sin ventas:" << endl;
+    for (int i = 0; i < 6; i++)
+    {
+        if (bimestres[i] == 0)
+            cout << "\t" << i + 1 << endl;
     }
 }
