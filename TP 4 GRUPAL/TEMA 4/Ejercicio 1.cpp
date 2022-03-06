@@ -33,13 +33,17 @@ const int vendedores = 10;
 // Registros de artículos:
 void primerLote(int *, float *);
 // Ventas efectuadas el anio anterior
-void segundoLote(float *, float *, int *);
+void segundoLote(float *, float *, int *, int (*)[12]);
 // Punto A
 // Listar recaudacion total mes por mes
 void listarRecaudacionTotalMes(float *);
 // Punto B
 // Listar bimestres en lo que no hubo ventas
 void listarBimestresSinVentas(int *);
+// Punto C
+// Listar vendedores inactivos durante 3 meses consecutivos en el anio
+void listarVendedoresInactivos(int (*)[12]);
+bool calcularInactividadConsecutiva(int (*)[12], int);
 
 int main()
 {
@@ -54,16 +58,20 @@ int main()
     // Punto B
     int bimestres[6] = {0};
 
+    // Punto C
+    int actividadPorMesVendedores[vendedores][12] = {0};
+
     // Desarrollo del Programa
     // Primer Lote
     primerLote(categoriaArticulo, precioUnitario);
     // Segundo Lote
-    segundoLote(precioUnitario, recaudacionTotalMes, bimestres);
+    segundoLote(precioUnitario, recaudacionTotalMes, bimestres, actividadPorMesVendedores);
     // Punto A
     listarRecaudacionTotalMes(recaudacionTotalMes);
     // Punto B
     listarBimestresSinVentas(bimestres);
-    puts("");
+    // Punto C
+    listarVendedoresInactivos(actividadPorMesVendedores);
 
     // Fin del Programa
     system("pause>nul");
@@ -86,7 +94,7 @@ void primerLote(int *categoriaArticulo, float *precioUnitario)
         cin >> codigoArticulo;
     }
 }
-void segundoLote(float *precioUnitario, float *recaudacionTotalMes, int *bimestres)
+void segundoLote(float *precioUnitario, float *recaudacionTotalMes, int *bimestres, int actividadPorMesVendedores[][12])
 {
     int mesVenta;       // (1 a 12)
     int diaVenta;       // (1 a 31)
@@ -114,6 +122,8 @@ void segundoLote(float *precioUnitario, float *recaudacionTotalMes, int *bimestr
             bimestres[((mesVenta + 1) / 2) - 1]++;
         else
             bimestres[(mesVenta / 2) - 1]++;
+        // Punto C
+        actividadPorMesVendedores[numeroVendedor - 1][mesVenta - 1]++;
 
         cout << "MES DE LA VENTA (1 a 12): ";
         cin >> mesVenta;
@@ -135,4 +145,34 @@ void listarBimestresSinVentas(int *bimestres)
         if (bimestres[i] == 0)
             cout << "\t" << i + 1 << endl;
     }
+}
+void listarVendedoresInactivos(int actividadPorMesVendedores[][12])
+{
+    cout << "\nVendedores inactivos durante 3 o mas meses consecutivos:" << endl;
+    for (int i = 0; i < vendedores; i++)
+    {
+        if (calcularInactividadConsecutiva(actividadPorMesVendedores, i))
+            cout << "\t" << i + 1 << endl;
+    }
+}
+bool calcularInactividadConsecutiva(int actividadPorMesVendedores[][12], int vendedor)
+{
+    int contadorConsecutivos = 0;
+    bool actividad = true;
+    for (int i = 0; i < 12; i++)
+    {
+        if ((actividadPorMesVendedores[vendedor][i] == 0) && (actividad==true))
+        {
+            contadorConsecutivos = 0;
+            actividad = false;
+        }
+        else if (actividadPorMesVendedores[vendedor][i] == 0)
+            contadorConsecutivos++;
+        else
+        {
+            actividad = true;
+            if (contadorConsecutivos >= 3) return true;
+        }
+    }
+    return false;
 }
