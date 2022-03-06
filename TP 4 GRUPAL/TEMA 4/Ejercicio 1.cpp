@@ -27,26 +27,35 @@
 #include <iostream>
 using namespace std;
 
-const int articulos = 100;
-const int vendedores = 50;
+const int articulos = 20;
+const int vendedores = 10;
 
 // Registros de artículos:
-void primerLote(int *, int *);
+void primerLote(int *, float *);
 // Ventas efectuadas el anio anterior
-void segundoLote();
+void segundoLote(float *, float *);
+// Punto A
+// Listar recaudacion total mes por mes
+void listarRecaudacionTotalMes(float *);
 
 int main()
 {
     system("color 6");
     // Variables
     int categoriaArticulo[articulos];
-    int precioUnitario[articulos];
+    float precioUnitario[articulos];
+
+    // Punto A
+    float recaudacionTotalMes[12] = {0};
 
     // Desarrollo del Programa
     // Primer Lote
     primerLote(categoriaArticulo, precioUnitario);
     // Segundo Lote
-    segundoLote();
+    segundoLote(precioUnitario, recaudacionTotalMes);
+    // Punto A
+    listarRecaudacionTotalMes(recaudacionTotalMes);
+    puts("");
 
     // Fin del Programa
     system("pause>nul");
@@ -54,7 +63,7 @@ int main()
 }
 
 // Desarrollo de Funciones
-void primerLote(int *categoriaArticulo, int *precioUnitario)
+void primerLote(int *categoriaArticulo, float *precioUnitario)
 {
     int codigoArticulo; // (1 a 100)
     cout << "INGRESAR EL CODIGO DEL ARTICULO (1 A 200): ";
@@ -69,7 +78,7 @@ void primerLote(int *categoriaArticulo, int *precioUnitario)
         cin >> codigoArticulo;
     }
 }
-void segundoLote()
+void segundoLote(float *precioUnitario, float *recaudacionTotalMes)
 {
     int mesVenta;       // (1 a 12)
     int diaVenta;       // (1 a 31)
@@ -90,9 +99,18 @@ void segundoLote()
         cout << "CANTIDAD VENDIDA: ";
         cin >> cantidadVendida;
 
-
+        // Punto A
+        recaudacionTotalMes[mesVenta - 1] = precioUnitario[codigoArticulo - 1] * cantidadVendida;
 
         cout << "MES DE LA VENTA (1 a 12): ";
         cin >> mesVenta;
+    }
+}
+void listarRecaudacionTotalMes(float *recaudacionTotalMes)
+{
+    cout<<"\nRecaudacion total mes por mes."<<endl;
+    for (int i = 0; i < 12; i++)
+    {
+        cout << "Mes " << i + 1 << ": Recaudacion Total: " << recaudacionTotalMes[i] << endl;
     }
 }
