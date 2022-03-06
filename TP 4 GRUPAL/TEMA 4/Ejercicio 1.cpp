@@ -44,6 +44,9 @@ void listarBimestresSinVentas(int *);
 // Listar vendedores inactivos durante 3 meses consecutivos en el anio
 void listarVendedoresInactivos(int (*)[12]);
 bool calcularInactividadConsecutiva(int (*)[12], int);
+// Punto D
+// Listar cantidad de articulos para cada una de las categorias
+void listarCantidadArticulosPorCategoria(int *);
 
 int main()
 {
@@ -72,6 +75,8 @@ int main()
     listarBimestresSinVentas(bimestres);
     // Punto C
     listarVendedoresInactivos(actividadPorMesVendedores);
+    // Punto D
+    listarCantidadArticulosPorCategoria(categoriaArticulo);
 
     // Fin del Programa
     system("pause>nul");
@@ -161,7 +166,7 @@ bool calcularInactividadConsecutiva(int actividadPorMesVendedores[][12], int ven
     bool actividad = true;
     for (int i = 0; i < 12; i++)
     {
-        if ((actividadPorMesVendedores[vendedor][i] == 0) && (actividad==true))
+        if ((actividadPorMesVendedores[vendedor][i] == 0) && (actividad == true))
         {
             contadorConsecutivos = 0;
             actividad = false;
@@ -171,8 +176,23 @@ bool calcularInactividadConsecutiva(int actividadPorMesVendedores[][12], int ven
         else
         {
             actividad = true;
-            if (contadorConsecutivos >= 3) return true;
+            if (contadorConsecutivos >= 3)
+                return true;
         }
     }
     return false;
+}
+void listarCantidadArticulosPorCategoria(int *categoriaArticulo)
+{
+    cout << "\nCantidad de articulos para cada una de las categorias:" << endl;
+    for (int i = 1; i <= 10; i++)
+    {
+        int cantidad = 0;
+        for (int c = 0; c < vendedores; c++)
+        {
+            if (categoriaArticulo[c] == i)
+                cantidad++;
+        }
+        cout << "Categoria " << i << ": " << cantidad << endl;
+    }
 }
